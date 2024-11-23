@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">Story App</string>
+    <string name="signup">Daftar</string>
+    <string name="login">Masuk</string>
+    <string name="message_welcome_page">Ayo ceritakan semua pengalaman menarikmu dan apa yang kamu rasakan di sini! Story App siap menjadi teman cerita dan berbagimu.</string>
+    <string name="title_welcome_page">Selamat datang di Story App!</string>
+    <string name="title_signup_page">Lengkapi data dirimu di bawah ini ya</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="message_login_page">Masukkan dulu datamu ya</string>
+    <string name="title_login_page">Sudah siap untuk upgrade skill?</string>
+    <string name="name">Nama</string>
+    <string name="message_main_page">Selamat Belajar di Story App.</string>
+    <string name="greeting">Halo %1$s,</string>
+    <string name="logout">Keluar</string>
+    <string name="password_not_valid">Password minimal 8 karakter</string>
+    <string name="have_an_account">Sudah punya akun? Login</string>
+    <string name="password_error">Password Error</string>
+    <string name="havenot_account">Belum Punya Akun? Daftar Sekarang</string>
+    <string name="menu_logout">Logout</string>
+    <string name="title">Title</string>
+    <string name="camera">Camera</string>
+    <string name="gallery">Gallery</string>
+    <string name="upload">Upload</string>
+</resources>
