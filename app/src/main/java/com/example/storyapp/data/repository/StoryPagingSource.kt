@@ -2,7 +2,7 @@ package com.example.storyapp.data.repository
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.example.storyapp.data.ListStoryItem
+import com.example.storyapp.data.response.ListStoryItem
 import com.example.storyapp.data.retrofit.ApiService
 
 class StoryPagingSource(private val apiService: ApiService): PagingSource<Int, ListStoryItem>() {

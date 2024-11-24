@@ -2,7 +2,6 @@ package com.example.storyapp.data.retrofit
 
 import android.util.Log
 import com.example.storyapp.BuildConfig
-import com.example.storyapp.utils.UserPreference
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor

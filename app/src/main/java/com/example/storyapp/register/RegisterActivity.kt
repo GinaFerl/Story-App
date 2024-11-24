@@ -3,12 +3,9 @@ package com.example.storyapp.register
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.view.WindowInsets
-import android.view.WindowManager
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -25,7 +22,7 @@ class RegisterActivity : AppCompatActivity() {
     private lateinit var binding: ActivityRegisterBinding
     private lateinit var userRepository: UserRepository
 
-    private val viewModel by viewModels<RegisterViewModel>() {
+    private val viewModel by viewModels<RegisterViewModel> {
         ViewModelFactory.getInstance(this, ApiConfig.getApiService("token"))
     }
 

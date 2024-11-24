@@ -30,7 +30,7 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var userRepository: UserRepository
     private lateinit var userPreference: UserPreference
 
-    private val viewModel by viewModels<LoginViewModel>() {
+    private val viewModel by viewModels<LoginViewModel> {
         ViewModelFactory.getInstance(this, ApiConfig.getApiService("token"))
     }
 

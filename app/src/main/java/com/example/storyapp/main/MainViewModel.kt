@@ -6,8 +6,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
-import com.example.storyapp.data.DetailStoryResponse
-import com.example.storyapp.data.ListStoryItem
+import com.example.storyapp.data.response.DetailStoryResponse
+import com.example.storyapp.data.response.ListStoryItem
 import com.example.storyapp.data.User
 import com.example.storyapp.data.repository.StoryRepository
 import com.example.storyapp.data.repository.UserRepository
@@ -49,7 +49,7 @@ class MainViewModel(
         }
     }
 
-    fun getStoryPager(): Flow<PagingData<ListStoryItem>> {
+    fun getStoryPager(): LiveData<PagingData<ListStoryItem>> {
         return storyRepository.getStoryPager()
     }
 }

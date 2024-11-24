@@ -4,8 +4,6 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import android.view.Menu
-import android.view.MenuItem
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
@@ -38,11 +36,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        adapter = MainAdapter {
-            val intent = Intent(this, DetailActivity::class.java)
-            intent.putExtra("id", it.id)
-            startActivity(intent)
-        }
+        adapter = MainAdapter()
 
         viewModel.getUser().observe(this) { user ->
             if (!user.isLogin || user.token.isEmpty()) {
@@ -53,8 +47,8 @@ class MainActivity : AppCompatActivity() {
                     binding.progressBar.visibility = View.VISIBLE
                     lifecycleScope.launch {
                         try {
-                            viewModel.getStoryPager().collectLatest { pagingData ->
-                                adapter.submitData(pagingData)
+                            viewModel.getStoryPager().observe(this@MainActivity) { pagingData ->
+                                adapter.submitData(lifecycle, pagingData)
                             }
                         } catch (e: Exception) {
                             e.printStackTrace()

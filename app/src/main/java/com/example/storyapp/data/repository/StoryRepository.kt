@@ -1,11 +1,13 @@
 package com.example.storyapp.data.repository
 
+import androidx.lifecycle.LiveData
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import com.example.storyapp.data.DetailStoryResponse
-import com.example.storyapp.data.ListStoryItem
-import com.example.storyapp.data.StoriesResponse
+import androidx.paging.liveData
+import com.example.storyapp.data.response.DetailStoryResponse
+import com.example.storyapp.data.response.ListStoryItem
+import com.example.storyapp.data.response.StoriesResponse
 import com.example.storyapp.data.retrofit.ApiService
 import com.example.storyapp.utils.UserPreference
 import kotlinx.coroutines.flow.Flow
@@ -49,7 +51,7 @@ class StoryRepository private constructor(
         }
     }
 
-    fun getStoryPager(): Flow<PagingData<ListStoryItem>> {
+    fun getStoryPager(): LiveData<PagingData<ListStoryItem>> {
         return Pager(
             config = PagingConfig(
                 pageSize = 10,
@@ -58,7 +60,7 @@ class StoryRepository private constructor(
             pagingSourceFactory = {
                 StoryPagingSource(apiService)
             }
-        ).flow
+        ).liveData
     }
 
 }

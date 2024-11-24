@@ -2,7 +2,7 @@ package com.example.storyapp.login
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
-import com.example.storyapp.data.LoginResponse
+import com.example.storyapp.data.response.LoginResponse
 import com.example.storyapp.data.User
 import com.example.storyapp.data.repository.UserRepository
 

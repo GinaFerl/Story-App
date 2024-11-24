@@ -6,7 +6,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
-import com.example.storyapp.data.DetailStoryResponse
+import com.example.storyapp.data.response.DetailStoryResponse
 import com.example.storyapp.data.retrofit.ApiConfig
 import com.example.storyapp.databinding.ActivityDetailBinding
 import com.example.storyapp.main.MainViewModel
@@ -41,14 +41,11 @@ class DetailActivity : AppCompatActivity() {
         }
     }
 
-    private fun updateUI(response: DetailStoryResponse) {
-        val story = response.story
-        binding.apply {
-            tvName.text = story.name
-            tvDesc.text = story.description
-            Glide.with(this@DetailActivity)
-                .load(story.photoUrl)
-                .into(ivStory)
-        }
+    private fun updateUI(story: DetailStoryResponse) {
+        binding.tvName.text = story.story.description
+        binding.tvDesc.text = story.story.name
+        Glide.with(this)
+            .load(story.story.photoUrl)
+            .into(binding.ivStory)
     }
 }
