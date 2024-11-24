@@ -28,7 +28,7 @@ import kotlinx.coroutines.launch
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
-    private val viewModel by viewModels<MainViewModel> {
+    private val viewModel: MainViewModel by viewModels {
         ViewModelFactory.getInstance(this, ApiConfig.getApiService("token"))
     }
     private lateinit var adapter: MainAdapter
@@ -77,7 +77,31 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent(this, AddStoryActivity::class.java))
         }
 
+        appBar()
         setupView()
+    }
+
+    private fun appBar() {
+        binding.topAppBar.setOnMenuItemClickListener { menuItem ->
+            when(menuItem.itemId) {
+                R.id.menu_logout -> {
+                    val alertDialog = AlertDialog.Builder(this)
+                        .setTitle("Logout")
+                        .setMessage("Are you sure you want to logout?")
+                        .setPositiveButton("Yes") { dialog, _ ->
+                            signOut()
+                            dialog.dismiss()
+                        }
+                        .setNegativeButton("No") { dialog, _ ->
+                            dialog.dismiss()
+                        }
+                        .create()
+                    alertDialog.show()
+                    true
+                }
+                else -> false
+            }
+        }
     }
 
     override fun onResume() {
@@ -103,31 +127,31 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.option_menu, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.menu_logout -> {
-                val alertDialog = AlertDialog.Builder(this)
-                    .setTitle("Logout")
-                    .setMessage("Are you sure you want to logout?")
-                    .setPositiveButton("Yes") { dialog, _ ->
-                        signOut()
-                        dialog.dismiss()
-                    }
-                    .setNegativeButton("No") { dialog, _ ->
-                        dialog.dismiss()
-                    }
-                    .create()
-                alertDialog.show()
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
-    }
+//    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+//        menuInflater.inflate(R.menu.option_menu, menu)
+//        return true
+//    }
+//
+//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+//        return when (item.itemId) {
+//            R.id.menu_logout -> {
+//                val alertDialog = AlertDialog.Builder(this)
+//                    .setTitle("Logout")
+//                    .setMessage("Are you sure you want to logout?")
+//                    .setPositiveButton("Yes") { dialog, _ ->
+//                        signOut()
+//                        dialog.dismiss()
+//                    }
+//                    .setNegativeButton("No") { dialog, _ ->
+//                        dialog.dismiss()
+//                    }
+//                    .create()
+//                alertDialog.show()
+//                true
+//            }
+//            else -> super.onOptionsItemSelected(item)
+//        }
+//    }
 
     private fun signOut() {
         lifecycleScope.launch {
