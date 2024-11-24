@@ -52,7 +52,8 @@ class StoryRepository private constructor(
     fun getStoryPager(): Flow<PagingData<ListStoryItem>> {
         return Pager(
             config = PagingConfig(
-                pageSize = 10
+                pageSize = 10,
+                enablePlaceholders = false
             ),
             pagingSourceFactory = {
                 StoryPagingSource(apiService)

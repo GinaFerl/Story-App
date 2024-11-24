@@ -1,6 +1,7 @@
 package com.example.storyapp.data.retrofit
 
 import android.util.Log
+import com.example.storyapp.BuildConfig
 import com.example.storyapp.utils.UserPreference
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -13,7 +14,11 @@ object ApiConfig {
         token.let {
             Log.d("ApiConfig", "Token value: $it")
         }
-        val loggingInterceptor = HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
+        val loggingInterceptor = if (BuildConfig.DEBUG) {
+            HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
+        } else {
+            HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.NONE)
+        }
         val authInterceptor = Interceptor { chain ->
             val req = chain.request()
             val requestHeaders = req.newBuilder()

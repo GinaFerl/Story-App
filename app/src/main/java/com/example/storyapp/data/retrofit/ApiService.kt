@@ -33,26 +33,21 @@ interface ApiService {
     ): LoginResponse
 
     @GET("stories")
-    @Headers("Authorization: Bearer")
     suspend fun getStories(
         @Query("page") page: Int = 1,
         @Query("size") size: Int = 10,
     ): StoriesResponse
 
     @GET("stories/{id}")
-    @Headers("Authorization: Bearer")
     suspend fun getDetailStory(
         @Path("id") id: String
     ): DetailStoryResponse
 
     @Multipart
     @POST("stories")
-    @Headers("Authorization: Bearer")
     suspend fun uploadStory(
         @Part file: MultipartBody.Part,
         @Part("description") description: RequestBody,
-        @Part("lat") lat: Float,
-        @Part("lon") lon: Float
     ): RegisterResponse
 
 }

@@ -6,6 +6,10 @@ import com.example.storyapp.data.ListStoryItem
 import com.example.storyapp.data.retrofit.ApiService
 
 class StoryPagingSource(private val apiService: ApiService): PagingSource<Int, ListStoryItem>() {
+    companion object {
+        const val INITIAL_PAGE_INDEX = 1
+    }
+
     override fun getRefreshKey(state: PagingState<Int, ListStoryItem>): Int? {
         return state.anchorPosition?.let { anchorPosition ->
             val anchorPage = state.closestPageToPosition(anchorPosition)
@@ -15,12 +19,12 @@ class StoryPagingSource(private val apiService: ApiService): PagingSource<Int, L
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, ListStoryItem> {
         return try {
-            val next = params.key ?: 1
+            val next = params.key ?: INITIAL_PAGE_INDEX
             val response = apiService.getStories(page = next, size = params.loadSize)
             val stories = response.listStory
             LoadResult.Page(
                 data = stories,
-                prevKey = if (next == 1) null else next - 1,
+                prevKey = if (next == INITIAL_PAGE_INDEX) null else next - 1,
                 nextKey = if (stories.isEmpty()) null else next + 1
             )
         } catch (e: Exception) {

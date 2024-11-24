@@ -28,7 +28,7 @@ import kotlinx.coroutines.launch
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
-    private val viewModel by viewModels<MainViewModel>() {
+    private val viewModel by viewModels<MainViewModel> {
         ViewModelFactory.getInstance(this, ApiConfig.getApiService("token"))
     }
     private lateinit var adapter: MainAdapter

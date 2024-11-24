@@ -1,5 +1,6 @@
 package com.example.storyapp.main
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
@@ -9,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.storyapp.data.ListStoryItem
 import com.example.storyapp.databinding.ItemStoryBinding
+import com.example.storyapp.story.DetailActivity
 
 class MainAdapter(private val onItemClick: (ListStoryItem) -> Unit): PagingDataAdapter<ListStoryItem, MainAdapter.MainViewHolder>(DIFF_CALLBACK) {
     class MainViewHolder(private val binding: ItemStoryBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -19,7 +21,9 @@ class MainAdapter(private val onItemClick: (ListStoryItem) -> Unit): PagingDataA
                 .load(story.photoUrl)
                 .into(binding.ivStory)
             binding.root.setOnClickListener {
-                onItemClick(story)
+                val intent = Intent(binding.root.context, DetailActivity::class.java)
+                intent.putExtra("storyId", story.id)
+                binding.root.context.startActivity(intent)
             }
         }
     }

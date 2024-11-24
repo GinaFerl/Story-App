@@ -13,9 +13,11 @@ class LoginViewModel(private val userRepository: UserRepository) : ViewModel() {
             val response = userRepository.login(email, password)
             Log.d("LoginViewModel", "Login response: $response")
             if (response.loginResult != null) {
-                val user = User(email, response.loginResult.token ?: "", true)
-                userRepository.saveUser(user)
-                Log.d("LoginViewModel", "User saved successfully")
+                response.loginResult.token?.let { token ->
+                    val user = User(email, token, true)
+                    userRepository.saveUser(user)
+                    Log.d("LoginViewModel", "User saved successfully")
+                }
             }
             response
         } catch (e: Exception) {
