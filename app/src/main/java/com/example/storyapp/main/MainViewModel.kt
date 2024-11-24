@@ -6,12 +6,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.example.storyapp.data.response.DetailStoryResponse
 import com.example.storyapp.data.response.ListStoryItem
 import com.example.storyapp.data.User
 import com.example.storyapp.data.repository.StoryRepository
 import com.example.storyapp.data.repository.UserRepository
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
 class MainViewModel(
@@ -40,6 +40,7 @@ class MainViewModel(
         }
     }
 
+
     suspend fun getStoryById(id: String): DetailStoryResponse {
         try {
             return storyRepository.getStoryById(id)
@@ -49,7 +50,7 @@ class MainViewModel(
         }
     }
 
-    fun getStoryPager(): LiveData<PagingData<ListStoryItem>> {
-        return storyRepository.getStoryPager()
-    }
+    val getStoryPager: LiveData<PagingData<ListStoryItem>> =
+        storyRepository.getStoryPager().cachedIn(viewModelScope)
+
 }

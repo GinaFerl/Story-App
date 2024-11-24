@@ -17,10 +17,8 @@ import com.example.storyapp.R
 import com.example.storyapp.data.retrofit.ApiConfig
 import com.example.storyapp.databinding.ActivityMainBinding
 import com.example.storyapp.story.AddStoryActivity
-import com.example.storyapp.story.DetailActivity
 import com.example.storyapp.utils.ViewModelFactory
 import com.example.storyapp.welcome.WelcomeActivity
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
@@ -38,30 +36,41 @@ class MainActivity : AppCompatActivity() {
 
         adapter = MainAdapter()
 
+//        viewModel.getUser().observe(this) { user ->
+//            if (!user.isLogin || user.token.isEmpty()) {
+//                startActivity(Intent(this, WelcomeActivity::class.java))
+//                finish()
+//            } else {
+//                if (user.token.isNotEmpty()) {
+//                    binding.progressBar.visibility = View.VISIBLE
+//                    lifecycleScope.launch {
+//                        try {
+//                            viewModel.getStoryPager.observe(this@MainActivity) { pagingData ->
+//                                adapter.submitData(lifecycle, pagingData)
+//                            }
+//                        } catch (e: Exception) {
+//                            e.printStackTrace()
+//                        } finally {
+//                            binding.progressBar.visibility = View.GONE
+//                        }
+//                    }
+//                    binding.progressBar.visibility = View.GONE
+//                } else {
+//                    startActivity(Intent(this, WelcomeActivity::class.java))
+//                    finish()
+//                }
+//            }
+//        }
+
         viewModel.getUser().observe(this) { user ->
             if (!user.isLogin || user.token.isEmpty()) {
                 startActivity(Intent(this, WelcomeActivity::class.java))
                 finish()
-            } else {
-                if (user.token.isNotEmpty()) {
-                    binding.progressBar.visibility = View.VISIBLE
-                    lifecycleScope.launch {
-                        try {
-                            viewModel.getStoryPager().observe(this@MainActivity) { pagingData ->
-                                adapter.submitData(lifecycle, pagingData)
-                            }
-                        } catch (e: Exception) {
-                            e.printStackTrace()
-                        } finally {
-                            binding.progressBar.visibility = View.GONE
-                        }
-                    }
-                    binding.progressBar.visibility = View.GONE
-                } else {
-                    startActivity(Intent(this, WelcomeActivity::class.java))
-                    finish()
-                }
             }
+        }
+
+        viewModel.getStoryPager.observe(this) { pagingData ->
+            adapter.submitData(lifecycle, pagingData)
         }
 
         binding.rvStory.layoutManager = LinearLayoutManager(this)
@@ -120,32 +129,6 @@ class MainActivity : AppCompatActivity() {
             )
         }
     }
-
-//    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-//        menuInflater.inflate(R.menu.option_menu, menu)
-//        return true
-//    }
-//
-//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-//        return when (item.itemId) {
-//            R.id.menu_logout -> {
-//                val alertDialog = AlertDialog.Builder(this)
-//                    .setTitle("Logout")
-//                    .setMessage("Are you sure you want to logout?")
-//                    .setPositiveButton("Yes") { dialog, _ ->
-//                        signOut()
-//                        dialog.dismiss()
-//                    }
-//                    .setNegativeButton("No") { dialog, _ ->
-//                        dialog.dismiss()
-//                    }
-//                    .create()
-//                alertDialog.show()
-//                true
-//            }
-//            else -> super.onOptionsItemSelected(item)
-//        }
-//    }
 
     private fun signOut() {
         lifecycleScope.launch {
