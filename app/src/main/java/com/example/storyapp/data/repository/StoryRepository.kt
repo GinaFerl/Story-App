@@ -1,14 +1,15 @@
 package com.example.storyapp.data.repository
 
+import androidx.lifecycle.LiveData
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import com.example.storyapp.data.DetailStoryResponse
-import com.example.storyapp.data.ListStoryItem
-import com.example.storyapp.data.StoriesResponse
+import androidx.paging.liveData
+import com.example.storyapp.data.response.DetailStoryResponse
+import com.example.storyapp.data.response.ListStoryItem
+import com.example.storyapp.data.response.StoriesResponse
 import com.example.storyapp.data.retrofit.ApiService
 import com.example.storyapp.utils.UserPreference
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull
 
 class StoryRepository private constructor(
@@ -33,7 +34,7 @@ class StoryRepository private constructor(
         try {
             userPreference.getUser().firstOrNull()?.token
                 ?: throw IllegalStateException("Token not found")
-            return apiService.getStories()
+            return apiService.getStories("token")
         } catch (e: Exception) {
             throw e
         }
@@ -41,23 +42,24 @@ class StoryRepository private constructor(
 
     suspend fun getStoryById(id: String): DetailStoryResponse {
         try {
-            userPreference.getUser().firstOrNull()?.token
+            val token = userPreference.getUser().firstOrNull()?.token
                 ?: throw IllegalStateException("Token not found")
-            return apiService.getDetailStory(id)
+            return apiService.getDetailStory(id, "Bearer $token") // Use the correct token format
         } catch (e: Exception) {
             throw e
         }
     }
 
-    fun getStoryPager(): Flow<PagingData<ListStoryItem>> {
+    fun getStoryPager(): LiveData<PagingData<ListStoryItem>> {
         return Pager(
             config = PagingConfig(
-                pageSize = 10
+                pageSize = 10,
+                enablePlaceholders = false
             ),
             pagingSourceFactory = {
-                StoryPagingSource(apiService)
+                StoryPagingSource(apiService, userPreference)
             }
-        ).flow
+        ).liveData
     }
 
 }

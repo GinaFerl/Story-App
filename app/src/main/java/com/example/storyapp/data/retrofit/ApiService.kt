@@ -1,14 +1,15 @@
 package com.example.storyapp.data.retrofit
 
-import com.example.storyapp.data.DetailStoryResponse
-import com.example.storyapp.data.LoginResponse
+import com.example.storyapp.data.response.DetailStoryResponse
+import com.example.storyapp.data.response.LoginResponse
 import com.example.storyapp.data.response.RegisterResponse
-import com.example.storyapp.data.StoriesResponse
+import com.example.storyapp.data.response.StoriesResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.Headers
 import retrofit2.http.Multipart
 import retrofit2.http.POST
@@ -33,26 +34,24 @@ interface ApiService {
     ): LoginResponse
 
     @GET("stories")
-    @Headers("Authorization: Bearer")
     suspend fun getStories(
+        @Header("Authorization") token: String,
         @Query("page") page: Int = 1,
         @Query("size") size: Int = 10,
     ): StoriesResponse
 
     @GET("stories/{id}")
-    @Headers("Authorization: Bearer")
     suspend fun getDetailStory(
+        @Header("Authorization") token: String,
         @Path("id") id: String
     ): DetailStoryResponse
 
     @Multipart
     @POST("stories")
-    @Headers("Authorization: Bearer")
     suspend fun uploadStory(
+        @Header("Authorization") token: String,
         @Part file: MultipartBody.Part,
         @Part("description") description: RequestBody,
-        @Part("lat") lat: Float,
-        @Part("lon") lon: Float
     ): RegisterResponse
 
 }

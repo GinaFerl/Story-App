@@ -34,8 +34,8 @@ android {
         jvmTarget = "11"
     }
     buildFeatures {
-        viewBinding = true
         buildConfig = true
+        viewBinding = true
     }
 }
 
@@ -59,6 +59,7 @@ dependencies {
     implementation(libs.androidx.camera.camera2)
     implementation(libs.androidx.camera.lifecycle)
     implementation(libs.androidx.camera.view)
+    implementation(libs.play.services.location)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

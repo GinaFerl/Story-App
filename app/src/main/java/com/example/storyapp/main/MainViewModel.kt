@@ -6,12 +6,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
-import com.example.storyapp.data.DetailStoryResponse
-import com.example.storyapp.data.ListStoryItem
+import androidx.paging.cachedIn
+import com.example.storyapp.data.response.DetailStoryResponse
+import com.example.storyapp.data.response.ListStoryItem
 import com.example.storyapp.data.User
 import com.example.storyapp.data.repository.StoryRepository
 import com.example.storyapp.data.repository.UserRepository
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
 class MainViewModel(
@@ -40,16 +40,21 @@ class MainViewModel(
         }
     }
 
-    suspend fun getStoryById(id: String): DetailStoryResponse {
-        try {
-            return storyRepository.getStoryById(id)
-        } catch (e: Exception) {
-            e.printStackTrace()
-            throw e
+
+     fun getStoryById(id: String): LiveData<DetailStoryResponse> {
+        val detailStoryResponse = MutableLiveData<DetailStoryResponse>()
+        viewModelScope.launch {
+            try {
+                val response = storyRepository.getStoryById(id)
+                detailStoryResponse.value = response
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
+        return detailStoryResponse
     }
 
-    fun getStoryPager(): Flow<PagingData<ListStoryItem>> {
-        return storyRepository.getStoryPager()
-    }
+    val getStoryPager: LiveData<PagingData<ListStoryItem>> =
+        storyRepository.getStoryPager().cachedIn(viewModelScope)
+
 }

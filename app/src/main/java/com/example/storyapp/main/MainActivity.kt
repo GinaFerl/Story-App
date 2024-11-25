@@ -4,8 +4,6 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import android.view.Menu
-import android.view.MenuItem
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
@@ -19,16 +17,14 @@ import com.example.storyapp.R
 import com.example.storyapp.data.retrofit.ApiConfig
 import com.example.storyapp.databinding.ActivityMainBinding
 import com.example.storyapp.story.AddStoryActivity
-import com.example.storyapp.story.DetailActivity
 import com.example.storyapp.utils.ViewModelFactory
 import com.example.storyapp.welcome.WelcomeActivity
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
-    private val viewModel by viewModels<MainViewModel>() {
+    private val viewModel: MainViewModel by viewModels {
         ViewModelFactory.getInstance(this, ApiConfig().getApiService("token"))
     }
     private lateinit var adapter: MainAdapter
@@ -38,36 +34,43 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        adapter = MainAdapter {
-            val intent = Intent(this, DetailActivity::class.java)
-            intent.putExtra("id", it.id)
-            startActivity(intent)
-        }
+        adapter = MainAdapter()
+
+//        viewModel.getUser().observe(this) { user ->
+//            if (!user.isLogin || user.token.isEmpty()) {
+//                startActivity(Intent(this, WelcomeActivity::class.java))
+//                finish()
+//            } else {
+//                if (user.token.isNotEmpty()) {
+//                    binding.progressBar.visibility = View.VISIBLE
+//                    lifecycleScope.launch {
+//                        try {
+//                            viewModel.getStoryPager.observe(this@MainActivity) { pagingData ->
+//                                adapter.submitData(lifecycle, pagingData)
+//                            }
+//                        } catch (e: Exception) {
+//                            e.printStackTrace()
+//                        } finally {
+//                            binding.progressBar.visibility = View.GONE
+//                        }
+//                    }
+//                    binding.progressBar.visibility = View.GONE
+//                } else {
+//                    startActivity(Intent(this, WelcomeActivity::class.java))
+//                    finish()
+//                }
+//            }
+//        }
 
         viewModel.getUser().observe(this) { user ->
             if (!user.isLogin || user.token.isEmpty()) {
                 startActivity(Intent(this, WelcomeActivity::class.java))
                 finish()
-            } else {
-                if (user.token.isNotEmpty()) {
-                    binding.progressBar.visibility = View.VISIBLE
-                    lifecycleScope.launch {
-                        try {
-                            viewModel.getStoryPager().collectLatest { pagingData ->
-                                adapter.submitData(pagingData)
-                            }
-                        } catch (e: Exception) {
-                            e.printStackTrace()
-                        } finally {
-                            binding.progressBar.visibility = View.GONE
-                        }
-                    }
-                    binding.progressBar.visibility = View.GONE
-                } else {
-                    startActivity(Intent(this, WelcomeActivity::class.java))
-                    finish()
-                }
             }
+        }
+
+        viewModel.getStoryPager.observe(this) { pagingData ->
+            adapter.submitData(lifecycle, pagingData)
         }
 
         binding.rvStory.layoutManager = LinearLayoutManager(this)
@@ -77,7 +80,31 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent(this, AddStoryActivity::class.java))
         }
 
+        appBar()
         setupView()
+    }
+
+    private fun appBar() {
+        binding.topAppBar.setOnMenuItemClickListener { menuItem ->
+            when(menuItem.itemId) {
+                R.id.menu_logout -> {
+                    val alertDialog = AlertDialog.Builder(this)
+                        .setTitle("Logout")
+                        .setMessage("Are you sure you want to logout?")
+                        .setPositiveButton("Yes") { dialog, _ ->
+                            signOut()
+                            dialog.dismiss()
+                        }
+                        .setNegativeButton("No") { dialog, _ ->
+                            dialog.dismiss()
+                        }
+                        .create()
+                    alertDialog.show()
+                    true
+                }
+                else -> false
+            }
+        }
     }
 
     override fun onResume() {
@@ -100,32 +127,6 @@ class MainActivity : AppCompatActivity() {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN
             )
-        }
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.option_menu, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.menu_logout -> {
-                val alertDialog = AlertDialog.Builder(this)
-                    .setTitle("Logout")
-                    .setMessage("Are you sure you want to logout?")
-                    .setPositiveButton("Yes") { dialog, _ ->
-                        signOut()
-                        dialog.dismiss()
-                    }
-                    .setNegativeButton("No") { dialog, _ ->
-                        dialog.dismiss()
-                    }
-                    .create()
-                alertDialog.show()
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
         }
     }
 

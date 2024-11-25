@@ -3,16 +3,9 @@ package com.example.storyapp.welcome
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.view.View
-import android.view.WindowInsets
-import android.view.WindowManager
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import com.example.storyapp.R
 import com.example.storyapp.databinding.ActivityWelcomeBinding
 import com.example.storyapp.login.LoginActivity
 import com.example.storyapp.register.RegisterActivity

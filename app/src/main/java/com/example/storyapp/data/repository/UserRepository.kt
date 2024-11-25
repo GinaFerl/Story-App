@@ -1,7 +1,7 @@
 package com.example.storyapp.data.repository
 
 import android.util.Log
-import com.example.storyapp.data.LoginResponse
+import com.example.storyapp.data.response.LoginResponse
 import com.example.storyapp.data.User
 import com.example.storyapp.data.response.ErrorResponse
 import com.example.storyapp.data.response.RegisterResponse

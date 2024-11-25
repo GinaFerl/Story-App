@@ -42,6 +42,11 @@ class LoginActivity : AppCompatActivity() {
         userRepository = Injection.provideUserRepository(this, ApiConfig().getApiService("token"))
         userPreference = UserPreference.getInstance(this.dataStore)
 
+        binding.tvRegister.setOnClickListener {
+            startActivity(Intent(this, RegisterActivity::class.java))
+            Log.d("LoginActivity", "Register button clicked")
+        }
+
         playAnimation()
         setupAction()
         checkUserSession()
