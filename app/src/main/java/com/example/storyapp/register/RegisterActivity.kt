@@ -26,7 +26,7 @@ class RegisterActivity : AppCompatActivity() {
     private lateinit var userRepository: UserRepository
 
     private val viewModel by viewModels<RegisterViewModel>() {
-        ViewModelFactory.getInstance(this, ApiConfig.getApiService("token"))
+        ViewModelFactory.getInstance(this, ApiConfig().getApiService("token"))
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,7 +34,7 @@ class RegisterActivity : AppCompatActivity() {
         binding = ActivityRegisterBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        userRepository = Injection.provideUserRepository(this, ApiConfig.getApiService("token"))
+        userRepository = Injection.provideUserRepository(this, ApiConfig().getApiService("token"))
 
         binding.loginTextView.setOnClickListener {
             val intent = Intent(this, LoginActivity::class.java)

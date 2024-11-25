@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
     private val viewModel by viewModels<MainViewModel>() {
-        ViewModelFactory.getInstance(this, ApiConfig.getApiService("token"))
+        ViewModelFactory.getInstance(this, ApiConfig().getApiService("token"))
     }
     private lateinit var adapter: MainAdapter
 

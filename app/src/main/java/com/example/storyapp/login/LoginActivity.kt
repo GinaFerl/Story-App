@@ -31,7 +31,7 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var userPreference: UserPreference
 
     private val viewModel by viewModels<LoginViewModel>() {
-        ViewModelFactory.getInstance(this, ApiConfig.getApiService("token"))
+        ViewModelFactory.getInstance(this, ApiConfig().getApiService("token"))
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,7 +39,7 @@ class LoginActivity : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        userRepository = Injection.provideUserRepository(this, ApiConfig.getApiService("token"))
+        userRepository = Injection.provideUserRepository(this, ApiConfig().getApiService("token"))
         userPreference = UserPreference.getInstance(this.dataStore)
 
         playAnimation()
